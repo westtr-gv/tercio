@@ -1,7 +1,7 @@
-import league
+import LeagueEngine
 import pygame
 
-class Overlay(league.DUGameObject):
+class Overlay(LeagueEngine.DUGameObject):
     def __init__(self, player):
         super().__init__(self)
         self._layer = 1000
