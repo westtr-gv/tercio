@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import sys    # This line must be above 'import LeagueEngine'
-sys.path.append(".")
+import sys
+sys.path.append("..")  # This line must be above 'import LeagueEngine'
 import pygame
 import LeagueEngine
 from player import Player
@@ -20,7 +20,7 @@ def main():
     engine = LeagueEngine.Engine("Tercio")
     engine.init_pygame()
 
-    sprites = LeagueEngine.Spritesheet("./assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)
+    sprites = LeagueEngine.Spritesheet("./assets/base_chip_pipo2.png", LeagueEngine.Settings.tile_size, 8)
     terrainFoliage = LeagueEngine.Tilemap("./assets/world.lvl", sprites, layer=1)
     terrainBackground = LeagueEngine.Tilemap("./assets/background.lvl", sprites, layer=0)
     world_size = (terrainFoliage.wide * LeagueEngine.Settings.tile_size, terrainFoliage.high * LeagueEngine.Settings.tile_size,)
