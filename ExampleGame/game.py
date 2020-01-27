@@ -9,9 +9,10 @@ from overlay import Overlay
 
 """This file is garbage. It was a hastily coded mockup
 to demonstrate how to use the engine.  We will be creating
-a Game class that organizes this code better (and is
+a Game class that organizes this codegame better (and is
 reusable).
 """
+
 
 
 # Function to call when colliding with zombie
