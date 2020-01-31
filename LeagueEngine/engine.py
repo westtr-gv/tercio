@@ -40,6 +40,7 @@ class Engine:
         self.collisions = {}
         self.overlay = None
         self.icon = {}
+        self.player = {}
 
     def init_pygame(self):
         """This function sets up the state of the pygame system,
@@ -82,6 +83,10 @@ class Engine:
             
             # Process inputs
             self.handle_inputs()
+
+            self.handle_keys()
+
+            self.mouse_move()
 
             # Update game world
             # Each object must have an update(time) method
@@ -140,4 +145,69 @@ class Engine:
             if event.type == pygame.KEYDOWN:
                 if event.key in self.key_events.keys():
                     self.key_events[event.key](self.game_delta_time) 
+
+    def handle_keys(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.player.move_left(self.game_delta_time)
+        elif keys[pygame.K_d]:
+            self.player.move_right(self.game_delta_time)
+
+        if keys[pygame.K_w]:
+            self.player.move_up(self.game_delta_time)
+        elif keys[pygame.K_s]:
+            self.player.move_down(self.game_delta_time)
+
+    '''
+    The screen is divided into 8 regions to determine the octal direction of the player.
+    This funciton determines the compass direction of the player
+    '''
+    def mouse_move(self):
+        mouseCords = pygame.mouse.get_pos()
+
+        # Mouse is at or above the player
+        if mouseCords[1] <= self.player.y:
+            # Orient top
+            if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
+                print('face north')
+
+            # Mouse is left of the player
+            elif mouseCords[0] < self.player.x:
+                # Orient left
+                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
+                    print('face west')
+                else:
+                    # Orient top-left
+                    print('face north west')
+
+            # Mouse is right of the player
+            elif mouseCords[0] > self.player.x:
+                # Orient right
+                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
+                    print('face east')
+                else:
+                    # Orient top-right
+                    print('face north east')
+
+        # Mouse is below the player
+        elif mouseCords[1] > self.player.y:
+            # Orient bottow
+            if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
+                print('face south')
+            # Mouse is left of the player
+            elif mouseCords[0] < self.player.x:
+                # Orient left
+                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
+                    print('face west')
+                else:
+                    # Orient top-left
+                    print('face south west')
+            # Mouse is right of the player
+            elif mouseCords[0] > self.player.x:
+                # Orient right
+                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
+                    print('face east')
+                else:
+                    # Orient top-right
+                    print('face south east')
 

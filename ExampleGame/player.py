@@ -15,7 +15,7 @@ class Player(Character):
         # Last time I was hit
         self.last_hit = pygame.time.get_ticks()
         # A unit-less value.  Bigger is faster.
-        self.delta = 512
+        self.delta = 420
         # Where the player is positioned
         self.x = x
         self.y = y

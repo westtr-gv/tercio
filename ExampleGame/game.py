@@ -13,18 +13,6 @@ a Game class that organizes this codegame better (and is
 reusable).
 """
 
-def handle_keys(player):
-    keys = pygame.key.get_pressed()
-    print(keys)
-    if keys[pygame.K_a]:
-        player.move_left
-    elif keys[pygame.K_d]:
-        player.move_right
-    if keys[pygame.K_w]:
-        player.move_up
-    elif keys[pygame.K_s]:
-        player.move_down
-
 # Function to call when colliding with zombie
 
 def main():
@@ -58,13 +46,12 @@ def main():
     engine.collisions[ourPlayer] = (q, ourPlayer.ouch)
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // LeagueEngine.Settings.gameTimeFactor)
 
-    engine.key_events[pygame.K_a] = ourPlayer.move_left
-    engine.key_events[pygame.K_d] = ourPlayer.move_right
-    engine.key_events[pygame.K_w] = ourPlayer.move_up
-    engine.key_events[pygame.K_s] = ourPlayer.move_down
+    # engine.key_events[pygame.K_a] = ourPlayer.move_left
+    # engine.key_events[pygame.K_d] = ourPlayer.move_right
+    # engine.key_events[pygame.K_w] = ourPlayer.move_up
+    # engine.key_events[pygame.K_s] = ourPlayer.move_down
 
-    handle_keys(ourPlayer)
-
+    engine.player = ourPlayer
     
 
     engine.events[pygame.USEREVENT + 1] = q.move_right
