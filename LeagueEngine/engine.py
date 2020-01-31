@@ -145,6 +145,15 @@ class Engine:
             if event.type == pygame.KEYDOWN:
                 if event.key in self.key_events.keys():
                     self.key_events[event.key](self.game_delta_time) 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print('mousedown')
+                pos = pygame.mouse.get_pos()
+                print(pos)
+            if event.type == pygame.MOUSEBUTTONUP:
+                print('mouseup')
+                pos = pygame.mouse.get_pos()
+                print(pos)
+            
 
     def handle_keys(self):
         keys = pygame.key.get_pressed()
