@@ -18,7 +18,7 @@ class Camera(UGameObject):
         self.y = self.center_on.y
         self.world_size = world_size
 
-    def update(deltaTime):
+    def update(self,deltaTime):
         pass
 
 class DumbCamera(Camera):
