@@ -5,6 +5,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from .settings import *
 
+
 class Engine:
     """Engine is the definition of our game engine.  We want it to
     be as game agnostic as possible, and will try to emulate code
@@ -24,10 +25,10 @@ class Engine:
     visible_statistics - Whether to show engine statistics statistics.
     """
 
-    def __init__(self, title):
+    def __init__(self, title, icon={}):
         self.title = title
         self.running = False
-        self.clock = None 
+        self.clock = None
         self.events = {}
         self.key_events = {}
         self.key_events[Settings.statistics_key] = self.toggle_statistics
@@ -39,22 +40,25 @@ class Engine:
         self.statistics_font = None
         self.collisions = {}
         self.overlay = None
-        self.icon = {}
+        self.icon = icon
         self.player = {}
 
     def init_pygame(self):
         """This function sets up the state of the pygame system,
         including passing any specific settings to it."""
+        
         # Startup the pygame system
         pygame.init()
         # Create our window
         self.screen = pygame.display.set_mode((Settings.width, Settings.height))
         # Set the title that will display at the top of the window.
         pygame.display.set_caption(self.title)
+
         # Load the game icon
-        self.icon = pygame.image.load('./assets/icon.png')
+        self.icon = pygame.image.load(self.icon)
         # Set the game icon
         pygame.display.set_icon(self.icon)
+
         # Create the clock
         self.clock = pygame.time.Clock()
         self.last_checked_time = pygame.time.get_ticks()
@@ -66,7 +70,7 @@ class Engine:
         # Set the repeat delay for key presses
         pygame.key.set_repeat(Settings.key_repeat)
         # Create statistics font
-        self.statistics_font = pygame.font.Font(None,30)
+        self.statistics_font = pygame.font.Font(None, 30)
 
     def run(self):
         """The main game loop.  As close to our book code as possible."""
@@ -80,7 +84,7 @@ class Engine:
 
             # Wipe screen
             self.screen.fill(Settings.fill_color)
-            
+
             # Process inputs
             self.handle_inputs()
 
@@ -95,13 +99,13 @@ class Engine:
                 o.update(self.game_delta_time)
 
             # Generate outputs
-            #d.update()
+            # d.update()
             self.drawables.draw(self.screen)
 
             # Show statistics?
             if self.visible_statistics:
                 self.show_statistics()
-            
+
             # Show overlay?
             if self.overlay:
                 self.show_overlay()
@@ -125,10 +129,10 @@ class Engine:
 
     def show_statistics(self):
         statistics_string = "Version: " + str(Settings.version)
-        statistics_string = statistics_string +  " FPS: " + str(int(self.clock.get_fps()))
+        statistics_string = statistics_string + " FPS: " + str(int(self.clock.get_fps()))
         fps = self.statistics_font.render(statistics_string, True, Settings.statistics_color)
         self.screen.blit(fps, (10, 10))
-    
+
     def show_overlay(self):
         self.screen.blit(self.overlay, Settings.overlay_location)
 
@@ -144,7 +148,7 @@ class Engine:
                 self.events[event.type](self.game_delta_time)
             if event.type == pygame.KEYDOWN:
                 if event.key in self.key_events.keys():
-                    self.key_events[event.key](self.game_delta_time) 
+                    self.key_events[event.key](self.game_delta_time)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print('mousedown')
                 pos = pygame.mouse.get_pos()
@@ -153,7 +157,6 @@ class Engine:
                 print('mouseup')
                 pos = pygame.mouse.get_pos()
                 print(pos)
-            
 
     def handle_keys(self):
         keys = pygame.key.get_pressed()
@@ -171,6 +174,7 @@ class Engine:
     The screen is divided into 8 regions to determine the octal direction of the player.
     This funciton determines the compass direction of the player
     '''
+
     def mouse_move(self):
         mouseCords = pygame.mouse.get_pos()
 
@@ -219,4 +223,3 @@ class Engine:
                 else:
                     # Orient top-right
                     print('face south east')
-

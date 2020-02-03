@@ -2,6 +2,7 @@
 
 import sys
 sys.path.append("..")  # This line must be above 'import LeagueEngine'
+print(sys.path)
 import pygame
 import LeagueEngine
 from player import Player
