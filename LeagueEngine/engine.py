@@ -182,44 +182,45 @@ class Engine:
         if mouseCords[1] <= self.player.y:
             # Orient top
             if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
-                print('face north')
+                self.player.orient = "N"
 
             # Mouse is left of the player
             elif mouseCords[0] < self.player.x:
                 # Orient left
                 if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    print('face west')
+                    self.player.orient = "W"
                 else:
                     # Orient top-left
-                    print('face north west')
+                    self.player.orient = "NW"
 
             # Mouse is right of the player
             elif mouseCords[0] > self.player.x:
                 # Orient right
                 if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    print('face east')
+                    self.player.orient = "E"
                 else:
                     # Orient top-right
-                    print('face north east')
+                    self.player.orient = "NE"
 
         # Mouse is below the player
         elif mouseCords[1] > self.player.y:
             # Orient bottow
             if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
-                print('face south')
+                self.player.orient = "S"
+
             # Mouse is left of the player
             elif mouseCords[0] < self.player.x:
                 # Orient left
                 if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    print('face west')
+                    self.player.orient = "W"
                 else:
                     # Orient top-left
-                    print('face south west')
+                    self.player.orient = "SW"
             # Mouse is right of the player
             elif mouseCords[0] > self.player.x:
                 # Orient right
                 if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    print('face east')
+                    self.player.orient = "E"
                 else:
                     # Orient top-right
-                    print('face south east')
+                    self.player.orient = "SE"

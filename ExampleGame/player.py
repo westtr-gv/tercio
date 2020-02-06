@@ -19,6 +19,7 @@ class Player(Character):
         # Where the player is positioned
         self.x = x
         self.y = y
+        self.orient = "N"
         # The image to use.  This will change frequently
         # in an animated Player class.
         self.image = pygame.image.load('./assets/zombie.png').convert_alpha()
