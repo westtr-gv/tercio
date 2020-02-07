@@ -92,6 +92,9 @@ class Engine:
 
             self.mouse_move()
 
+            # change player orientation
+            self.player.image = self.player.images[self.player.orient][1]
+
             # Update game world
             # Each object must have an update(time) method
             self.check_collisions()

@@ -31,7 +31,101 @@ class Player(Character):
         self.y = y
         # The image to use.  This will change frequently
         # in an animated Player class.
-        self.image = pygame.image.load('./ExampleGame/assets/zombie.png').convert_alpha()
+        self.images = {
+            "N" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/N_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/N_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/N_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/N_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
+            },
+            "E" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/E_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/E_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/E_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/E_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/E_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/E_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/E_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/E_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/E_9.png').convert_alpha(),
+            },
+            "S" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/S_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/S_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/S_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/S_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/S_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/S_9.png').convert_alpha(),
+            },
+            "W" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/W_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/W_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/W_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/W_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/W_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/W_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/W_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/W_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/W_9.png').convert_alpha(),
+            },
+            "NE" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/N_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/N_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/N_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/N_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
+            },
+            "NW" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/N_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/N_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/N_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/N_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
+            },
+            "SE" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/S_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/S_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/S_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/S_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/S_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/S_9.png').convert_alpha(),
+            },
+            "SW" : {
+                1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
+                2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
+                3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
+                4: pygame.image.load('./Assets/Sprites/Player/walking/S_4.png').convert_alpha(),
+                5: pygame.image.load('./Assets/Sprites/Player/walking/S_5.png').convert_alpha(),
+                6: pygame.image.load('./Assets/Sprites/Player/walking/S_6.png').convert_alpha(),
+                7: pygame.image.load('./Assets/Sprites/Player/walking/S_7.png').convert_alpha(),
+                8: pygame.image.load('./Assets/Sprites/Player/walking/S_8.png').convert_alpha(),
+                9: pygame.image.load('./Assets/Sprites/Player/walking/S_9.png').convert_alpha(),
+            },
+        }
+
+        # pygame.transform.flip(self.image, True, False)
+        
+        self.image = self.images["N"][1]
+
         self.image = pygame.transform.scale(self.image, (64, 64))
         self.rect = self.image.get_rect()
         # How big the world is, so we can check for boundries
