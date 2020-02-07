@@ -43,6 +43,8 @@ class Engine:
         self.icon = icon
         self.player = {}
 
+        self.iterations = 0
+
     def init_pygame(self):
         """This function sets up the state of the pygame system,
         including passing any specific settings to it."""
@@ -93,7 +95,8 @@ class Engine:
             self.mouse_move()
 
             # change player orientation
-            self.player.image = self.player.images[self.player.orient][1]
+            self.iterations += 1
+            self.player.image = self.player.images[self.player.orient][(self.iterations % 8) + 1]
 
             # Update game world
             # Each object must have an update(time) method
