@@ -90,13 +90,21 @@ class Engine:
             # Process inputs
             self.handle_inputs()
 
-            self.handle_keys()
-
+            #change the player orientation
             self.mouse_move()
 
-            # change player orientation
+            # TODO : base only increment this if a certain amount of game time has elapsed
             self.iterations += 1
-            self.player.image = self.player.images[self.player.orient][(self.iterations % 8) + 1]
+
+            # handle movement and animation at the same time
+            if self.handle_keys():
+                self.player.image = self.player.images[self.player.orient][(self.iterations % 8) + 1]
+            else:
+                self.player.image = self.player.images[self.player.orient][1]
+
+            # reset to avoid big maths
+            if self.iterations == 8:
+                self.iterations == 0
 
             # Update game world
             # Each object must have an update(time) method
@@ -166,15 +174,22 @@ class Engine:
 
     def handle_keys(self):
         keys = pygame.key.get_pressed()
+        pressed = False
         if keys[pygame.K_a]:
             self.player.move_left(self.game_delta_time)
+            pressed = True
         elif keys[pygame.K_d]:
             self.player.move_right(self.game_delta_time)
+            pressed = True
 
         if keys[pygame.K_w]:
             self.player.move_up(self.game_delta_time)
+            pressed = True
         elif keys[pygame.K_s]:
             self.player.move_down(self.game_delta_time)
+            pressed = True
+        
+        return pressed
 
     '''
     The screen is divided into 8 regions to determine the octal direction of the player.
