@@ -11,6 +11,7 @@ This starting script is copied from the ExampleGame
 import pygame
 from LeagueEngine import *
 
+
 class Player(Character):
     """This is a sample class for a player object.  A player
     is a character, is a drawable, and an updateable object.
@@ -18,8 +19,9 @@ class Player(Character):
     moving, throwing/shooting, collisions, etc.  It was hastily
     written as a demo but should direction.
     """
-    def __init__(self, z=0, x=0, y=0):
-        super().__init__(z, x, y)
+
+    def __init__(self, layer=0, x=0, y=0):
+        super().__init__(layer, x, y)
         # This unit's health
         self.health = 100
         # Last time I was hit
@@ -32,7 +34,7 @@ class Player(Character):
         # The image to use.  This will change frequently
         # in an animated Player class.
         self.images = {
-            "N" : {
+            "N": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
@@ -43,7 +45,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
             },
-            "E" : {
+            "E": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/E_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/E_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/E_3.png').convert_alpha(),
@@ -54,7 +56,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/E_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/E_9.png').convert_alpha(),
             },
-            "S" : {
+            "S": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
@@ -65,7 +67,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/S_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/S_9.png').convert_alpha(),
             },
-            "W" : {
+            "W": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/W_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/W_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/W_3.png').convert_alpha(),
@@ -76,7 +78,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/W_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/W_9.png').convert_alpha(),
             },
-            "NE" : {
+            "NE": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
@@ -87,7 +89,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
             },
-            "NW" : {
+            "NW": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/N_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/N_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/N_3.png').convert_alpha(),
@@ -98,7 +100,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/N_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/N_9.png').convert_alpha(),
             },
-            "SE" : {
+            "SE": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
@@ -109,7 +111,7 @@ class Player(Character):
                 8: pygame.image.load('./Assets/Sprites/Player/walking/S_8.png').convert_alpha(),
                 9: pygame.image.load('./Assets/Sprites/Player/walking/S_9.png').convert_alpha(),
             },
-            "SW" : {
+            "SW": {
                 1: pygame.image.load('./Assets/Sprites/Player/walking/S_1.png').convert_alpha(),
                 2: pygame.image.load('./Assets/Sprites/Player/walking/S_2.png').convert_alpha(),
                 3: pygame.image.load('./Assets/Sprites/Player/walking/S_3.png').convert_alpha(),
@@ -123,7 +125,7 @@ class Player(Character):
         }
 
         # pygame.transform.flip(self.image, True, False)
-        
+
         self.image = self.images["N"][1]
 
         self.image = pygame.transform.scale(self.image, (64, 64))
@@ -142,11 +144,11 @@ class Player(Character):
         # don't have to create more memory each iteration of
         # collision detection.
         self.collider = Drawable()
-        self.collider.image = pygame.Surface([Settings.tile_size, Settings.tile_size], pygame.SRCALPHA)
+        self.collider.image = pygame.Surface([Settings.tile_size // 8, Settings.tile_size // 8], pygame.SRCALPHA)
         self.collider.rect = self.collider.image.get_rect()
         # Overlay
-        self.font = pygame.font.Font('freesansbold.ttf',32)
-        self.overlay = self.font.render(str(self.health) + "        4 lives", True, (0,0,0))
+        self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.overlay = self.font.render(str(self.health) + "        4 lives", True, (0, 0, 0))
 
     def move_left(self, time):
         amount = self.delta * time
@@ -209,11 +211,13 @@ class Player(Character):
             pass
 
     def update(self, time):
+        self.dirty = 1
+        self.collider.dirty = 1
         self.rect.x = self.x
         self.rect.y = self.y
         self.collisions = []
         for sprite in self.blocks:
-            self.collider.rect.x= sprite.x
+            self.collider.rect.x = sprite.x
             self.collider.rect.y = sprite.y
             if pygame.sprite.collide_rect(self, self.collider):
                 self.collisions.append(sprite)

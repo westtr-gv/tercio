@@ -6,20 +6,25 @@ class GameObject(abc.ABC):
     """Any object that makes up our game world."""
     pass
 
-class Drawable(pygame.sprite.Sprite):
-    """Creates a drawable.  For us, a drawable is a pygame Sprite object."""
+class Drawable(pygame.sprite.DirtySprite):
+    """Creates a drawable.  For us, a drawable is a pygame DirtySprite object."""
     def __init__(self, layer=0, x=0, y=0):
         super().__init__()
+        # pygame.sprite.DirtySprite.__init__(self)
         self._layer = layer
         self.image = None
         self.rect = pygame.Rect(0, 0, Settings.tile_size, Settings.tile_size)
         self.x = x
         self.y = y
+        self.dirty = 1
+    def update(self, gameDeltaTime):
+        self.dirty = 0
+
 
 class Updateable(abc.ABC):
     """An interface that ensures an object has an update(gameDeltaTime) method."""
     @abc.abstractmethod
-    def update(gameDeltaTime):
+    def update(self, gameDeltaTime):
         pass
 
 class UGameObject(GameObject, Updateable):

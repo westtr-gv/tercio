@@ -17,13 +17,13 @@ class Settings:
     overlay_color - Color to use for overlay text.
     """
     version = 0.9
-    fps = 30
+    fps = 144
     key_repeat = 50
     width = 800
     height = 600
     tile_size = 32
     gameTimeFactor = 1
-    fill_color = (255, 255, 255)
+    fill_color = (46, 88, 100)
     statistics_color = (0, 0, 0)
     statistics_key = pygame.K_BACKQUOTE
     overlay_color = (0, 0, 0)

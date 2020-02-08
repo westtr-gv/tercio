@@ -8,6 +8,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
+
 class Camera(UGameObject):
     def __init__(self, width, height, center_on, drawables, world_size):
         self.width = width
@@ -18,8 +19,9 @@ class Camera(UGameObject):
         self.y = self.center_on.y
         self.world_size = world_size
 
-    def update(self,deltaTime):
+    def update(self, deltaTime):
         pass
+
 
 class DumbCamera(Camera):
     def update(self, time):
@@ -27,26 +29,31 @@ class DumbCamera(Camera):
         self.y = self.center_on.y
         offset_x = - (self.x - (self.width // 2))
         offset_y = - (self.y - (self.height // 2))
-        
+
         for d in self.drawables:
             d.rect.x = d.x + offset_x
             d.rect.y = d.y + offset_y
+            d.dirty = 1
+
 
 class LessDumbCamera(Camera):
     def update(self, time):
+        self.dirty = 1
         if self.center_on.x - self.width // 2 > 0 and self.center_on.x + self.width // 2 < self.world_size[0] - Settings.tile_size:
             self.x = self.center_on.x
         if self.center_on.y - self.height // 2 > 0 and self.center_on.y + self.height // 2 < self.world_size[1] - Settings.tile_size:
             self.y = self.center_on.y
         offset_x = - (self.x - (self.width // 2))
         offset_y = - (self.y - (self.height // 2))
-        #print(str(offset_x) + ", " + str(offset_y))
-        
+        # print(str(offset_x) + ", " + str(offset_y))
+
         for d in self.drawables:
             if hasattr(d, 'static'):
                 continue
             d.rect.x = d.x + offset_x
             d.rect.y = d.y + offset_y
+            d.dirty = 1
+
 
 class Tilemap:
     """An object that represents an MxN list of tiles.  Give x, y
@@ -55,6 +62,7 @@ class Tilemap:
 
     Fields:
     path - A path to the file that holds the tilemap data.  Structure described below.
+    path2 - A path to the file that holds our collidable objects reference numbers
     spritesheet - The spritesheet from which to get the images for the tiles.
     tile_size - The number of pixels wide and high (we are forcing squares) per tile.
     wide - The number of tiles wide the map holds.
@@ -64,8 +72,8 @@ class Tilemap:
 
     File structure:
     A tilemap file begins with the width (an integer) of the map (in tiles, not pixels), a newline,
-    the height (an integer; again in tiles, not pixels), followed by a comma-separated list of lists
-    of integers that represent the sprite number from the spritesheet.  For instance,
+    the height (an integer; again in tiles, not pixels), a newline, followed by a comma-separated
+    list of lists of integers that represent the sprite number from the spritesheet.  For instance,
 
     5
     7
@@ -75,8 +83,11 @@ class Tilemap:
     1, 1, 1, 2, 1, 2, 2
     2, 2, 2, 2, 1, 2, 2
     """
-    def __init__(self, path, spritesheet, tile_size = Settings.tile_size, layer = 0):
+
+    def __init__(self, path, path2, spritesheet, tile_size=Settings.tile_size, layer=0):
         self.path = path
+        self.path2 = path2
+        self.collidables = []
         self.spritesheet = spritesheet
         self.tile_size = tile_size
         self.layer = layer
@@ -96,6 +107,13 @@ class Tilemap:
         self.wide = int(contents[0][0])
         # And how tall?
         self.high = int(contents[1][0])
+
+        # Record which objects are collidables
+        with open(self.path2, 'r') as f2:
+            reader2 = csv.reader(f2)
+            contents2 = list(reader2)
+        self.collidables = list(map(int, contents2[0]))
+
         # Sprite numbers for all tiles are in the
         # multidimensional list "world".
         self.world = contents[2:]
@@ -106,21 +124,24 @@ class Tilemap:
                 x = b * self.spritesheet.tile_size
                 y = a * self.spritesheet.tile_size
                 num = int(j)
-                base_sprite = self.spritesheet.sprites[abs(num)]
-                sprite = Drawable(self.layer)
-                sprite.image = base_sprite.image
-                # Set rectangle coords (using top-left coords here)
-                rect = sprite.image.get_rect() 
-                rect.x = x
-                rect.y = y
-                sprite.x = x
-                sprite.y = y
-                sprite.rect = rect
-                self.passable.add(sprite)
-                if num < 0:
-                    self.impassable.add(sprite)
+                if(num != 0):
+                    base_sprite = self.spritesheet.sprites[abs(num)]
+                    sprite = Drawable(self.layer)
+                    sprite.image = base_sprite.image
+                    # Set rectangle coords (using top-left coords here)
+                    rect = sprite.image.get_rect()
+                    rect.x = x
+                    rect.y = y
+                    sprite.x = x
+                    sprite.y = y
+                    sprite.rect = rect
+                    self.passable.add(sprite)
+                    # if num < 0:
+                    if num in self.collidables:
+                        self.impassable.add(sprite)
                 b = b + 1
             a = a + 1
+
 
 class Spritesheet:
     """An object that represents a spritesheet and provides
@@ -138,6 +159,7 @@ class Spritesheet:
     height - Number of pixels high of the spritesheet image.
     sprites - A single-dimensional list of the sprites from the sheet.
     """
+
     def __init__(self, path, tile_size, per_row):
         self.path = path
         self.sheet = pygame.image.load(self.path).convert_alpha()
@@ -151,16 +173,17 @@ class Spritesheet:
         # and returns a list of the chunks.
         sprites = []
         for i in range((self.width * self.height) // (Settings.tile_size * Settings.tile_size)):
-                image = self.__get_image_num(i)
-                sprites.append(image)
+            image = self.__get_image_num(i)
+            sprites.append(image)
         return sprites
 
     def __get_image_num(self, num):
         # This function copies an MxM image from x, y
         # to a new Sprite and returns it.
-        y = self.tile_size * (num  // self.per_row)
-        x = self.tile_size * (num  % self.per_row)
+        y = self.tile_size * (num // self.per_row)
+        x = self.tile_size * (num % self.per_row)
         sprite = Drawable()
-        sprite.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
-        sprite.image.blit(self.sheet, (0, 0), (x, y, x + self.tile_size, y + self.tile_size))
+        if((x, y) != (0, 0)):
+            sprite.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+            sprite.image.blit(self.sheet, (0, 0), (x, y, x + self.tile_size, y + self.tile_size))
         return sprite
