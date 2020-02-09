@@ -104,9 +104,11 @@ class Tilemap:
             reader = csv.reader(f)
             contents = list(reader)
         # How many tiles wide is our world?
-        self.wide = int(contents[0][0])
+        # self.wide = int(contents[0][0])
+        self.wide = 128
         # And how tall?
-        self.high = int(contents[1][0])
+        # self.high = int(contents[1][0])
+        self.high = 128
 
         # Record which objects are collidables
         with open(self.path2, 'r') as f2:
@@ -116,7 +118,7 @@ class Tilemap:
 
         # Sprite numbers for all tiles are in the
         # multidimensional list "world".
-        self.world = contents[2:]
+        self.world = contents[0:]
         a = 0
         for i in self.world:
             b = 0
@@ -124,7 +126,7 @@ class Tilemap:
                 x = b * self.spritesheet.tile_size
                 y = a * self.spritesheet.tile_size
                 num = int(j)
-                if(num != 0):
+                if(num != -1):
                     base_sprite = self.spritesheet.sprites[abs(num)]
                     sprite = Drawable(self.layer)
                     sprite.image = base_sprite.image

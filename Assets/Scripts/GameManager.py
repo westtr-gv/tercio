@@ -31,7 +31,7 @@ def main():
     engine = LeagueEngine.Engine("Tercio", './Assets/Sprites/Branding/icon.png')
     engine.init_pygame()
 
-    world = "./Assets/World/Map1_SemiOptimized"
+    world = "./Assets/World/Map1"
     sprites = "./Assets/Sprites"
     scripts = "./Assets/Scripts"
 
@@ -49,17 +49,6 @@ def main():
 
     # sprites = LeagueEngine.Spritesheet("./ExampleGame/assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)
 
-    # # cliffSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/Cliff_tileset.png", LeagueEngine.Settings.tile_size, 15)
-    # # foliageSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/Outside_B.png", LeagueEngine.Settings.tile_size, 16)
-    # # foliage2Sprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/object- layer.png", LeagueEngine.Settings.tile_size, 14)
-    # # graveyardSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/Graveyard/grave_markers-shadow.png", LeagueEngine.Settings.tile_size, 9)
-    # # house1Sprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/House/house1_Scaled.png", LeagueEngine.Settings.tile_size, 7)
-    # # house2Sprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/House2/House_Scaled.png", LeagueEngine.Settings.tile_size, 8)
-    # # house3Sprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/House3/house3x3_Scaled.png", LeagueEngine.Settings.tile_size, 8)
-    # # lootChestSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Loot/chest2_WithTransparent.png", LeagueEngine.Settings.tile_size, 5)
-    # # terrainGroundSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/ground_tiles.png", LeagueEngine.Settings.tile_size, 21)
-    # # treeSprites = LeagueEngine.Spritesheet("./Assets/Sprites/Tilesets/Outside/treesv6_0.png", LeagueEngine.Settings.tile_size, 21)
-
     sprites = LeagueEngine.Spritesheet((world + "/Spritesheet.png"), LeagueEngine.Settings.tile_size, 97)
 
 
@@ -76,25 +65,21 @@ def main():
     # terrainFoliage = LeagueEngine.Tilemap("./ExampleGame/assets/world.lvl", sprites, layer=1)
     # terrainBackground = LeagueEngine.Tilemap("./ExampleGame/assets/background.lvl", sprites, layer=0)
 
-    # # house3Tilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/House3.lvl", house3Sprites, layer=12)
-    # # house2Tilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/House2.lvl", house2Sprites, layer=11)
-    # # house1Tilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/House1.lvl", house1Sprites, layer=10)
-    # # desertTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/DesertFoliage.lvl", treeSprites, layer=9)
-    # # foliageLargeTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/FoliageLarge.lvl", foliageSprites, layer=8)
-    # # foliageMedTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/FoliageMedium.lvl", foliage2Sprites, layer=7)
-    # # foliageSmallTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/FoliageSmall.lvl", foliage2Sprites, layer=6)
-    # # lootChestTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/LootChest.lvl", lootChestSprites, layer=5)
-    # # graveyardTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/Graveyard.lvl", graveyardSprites, layer=4)
-    # # cliffTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/Cliffside.lvl", cliffSprites, layer=3)
-    # # roadsTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/RoadsAndRocks.lvl", terrainGroundSprites, layer=2)
-    # # terrainTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/TerrainGround.lvl", terrainGroundSprites, layer=1)
-    # # waterTilemap = LeagueEngine.Tilemap("./Assets/World/Map1/LVL/Water.lvl", , layer=0)
-
-    lootChestTilemap = LeagueEngine.Tilemap((world + "/LVL/Map1_Over Player_Loot Chests.csv"), (world + "/LVL/Collidables.csv"), sprites, layer = 5)
-    foregroundTilemap = LeagueEngine.Tilemap((world + "/LVL/Map1_Over Player_Foreground.csv"), (world + "/LVL/Collidables.csv"), sprites, layer = 4)
-    smallFoliageTilemap = LeagueEngine.Tilemap((world + "/LVL/Map1_Under Player_Small Foliage.csv"), (world + "/LVL/Collidables.csv"), sprites, layer = 2)
-    cliffsideTilemap = LeagueEngine.Tilemap((world + "/LVL/Map1_Under Player_Cliffside.csv"), (world + "/LVL/Collidables.csv"), sprites, layer = 1)
-    terrainTilemap = LeagueEngine.Tilemap((world + "/LVL/Map1_Under Player_Background.csv"), (world + "/LVL/Collidables.csv"), sprites, layer = 0)
+    lootChestTilemap = LeagueEngine.Tilemap((world + "/CSV/Map1_Loot Chests.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 13)
+    objectsForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Objects_Objects Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 12)
+    desertForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Desert_Desert Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 11)
+    graveyardForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Graveyard_Graveyard Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 10)
+    largeFoliageForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Large Foliage Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 9)
+    mediumFoliageForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Medium Foliage Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 8)
+    
+    objectsBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Objects_Objects Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 7)
+    desertBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Desert_Desert Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 6)
+    graveyardBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Graveyard_Graveyard Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 5)
+    largeFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Large Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 4)
+    mediumFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Medium Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 3)
+    smallFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Small Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 2)
+    terrainForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Terrain_Terrain Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 1)
+    terrainBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Terrain_Terrain Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 0)
 
 
 
@@ -110,9 +95,7 @@ def main():
 
     # worldSize = (terrainFoliage.wide * LeagueEngine.Settings.tile_size, terrainFoliage.high * LeagueEngine.Settings.tile_size,)
     
-    # # worldSize = (terrainTilemap.wide * LeagueEngine.Settings.tile_size, terrainTilemap.high * LeagueEngine.Settings.tile_size,)
-
-    worldSize = (terrainTilemap.wide * LeagueEngine.Settings.tile_size, terrainTilemap.high * LeagueEngine.Settings.tile_size,)
+    worldSize = (terrainBackground.wide * LeagueEngine.Settings.tile_size, terrainBackground.high * LeagueEngine.Settings.tile_size,)
 
 
 #  ██████╗ ██████╗  █████╗ ██╗    ██╗ █████╗ ██████╗ ██╗     ███████╗███████╗
@@ -126,27 +109,22 @@ def main():
 
     # engine.drawables.add(terrainFoliage.passable.sprites())
     # engine.drawables.add(terrainBackground.passable.sprites())
-    
-    # # engine.drawables.add(house3Tilemap.passable.sprites())
-    # # engine.drawables.add(house2Tilemap.passable.sprites())
-    # # engine.drawables.add(house1Tilemap.passable.sprites())
-    # # engine.drawables.add(desertTilemap.passable.sprites())
-    # # engine.drawables.add(foliageLargeTilemap.passable.sprites())
-    # # engine.drawables.add(foliageMedTilemap.passable.sprites())
-    # # engine.drawables.add(foliageSmallTilemap.passable.sprites())
-    # # engine.drawables.add(lootChestTilemap.passable.sprites())
-    # # engine.drawables.add(graveyardTilemap.passable.sprites())
-    # # engine.drawables.add(cliffTilemap.passable.sprites())
-    # # engine.drawables.add(roadsTilemap.passable.sprites())
-    # # engine.drawables.add(terrainTilemap.passable.sprites())
-    # # engine.drawables.add(waterTilemap.passable.sprites())
 
     engine.drawables.add(lootChestTilemap.passable.sprites())
-    engine.drawables.add(foregroundTilemap.passable.sprites())
-    engine.drawables.add(smallFoliageTilemap.passable.sprites())
-    engine.drawables.add(cliffsideTilemap.passable.sprites())
-    engine.drawables.add(terrainTilemap.passable.sprites())
+    engine.drawables.add(desertForeground.passable.sprites())
+    engine.drawables.add(graveyardForeground.passable.sprites())
+    engine.drawables.add(largeFoliageForeground.passable.sprites())
+    engine.drawables.add(mediumFoliageForeground.passable.sprites())
+    engine.drawables.add(objectsForeground.passable.sprites())
+    engine.drawables.add(terrainForeground.passable.sprites())
 
+    engine.drawables.add(desertBackground.passable.sprites())
+    engine.drawables.add(graveyardBackground.passable.sprites())
+    engine.drawables.add(largeFoliageBackground.passable.sprites())
+    engine.drawables.add(mediumFoliageBackground.passable.sprites())
+    engine.drawables.add(objectsBackground.passable.sprites())
+    engine.drawables.add(smallFoliageBackground.passable.sprites())
+    engine.drawables.add(terrainBackground.passable.sprites())
 
 
 
@@ -161,25 +139,23 @@ def main():
 
     ourPlayer = Player(3, 1000, 1000)
     ourOverlay = Overlay(ourPlayer)
-    # ourPlayer.blocks.add(terrainFoliage.impassable)
-    # # ourPlayer.blocks.add(cliffTilemap.impassable)
-    # # ourPlayer.blocks.add(desertTilemap.impassable)
-    # # ourPlayer.blocks.add(foliageLargeTilemap.impassable)
-    # # ourPlayer.blocks.add(foliageMedTilemap.impassable)
-    # # ourPlayer.blocks.add(foliageSmallTilemap.impassable)
-    # # ourPlayer.blocks.add(graveyardTilemap.impassable)
-    # # ourPlayer.blocks.add(house1Tilemap.impassable)
-    # # ourPlayer.blocks.add(house2Tilemap.impassable)
-    # # ourPlayer.blocks.add(house3Tilemap.impassable)
-    # # ourPlayer.blocks.add(lootChestTilemap.impassable)
-    # # ourPlayer.blocks.add(roadsTilemap.impassable)
-    # # ourPlayer.blocks.add(terrainTilemap.impassable)
-    # # ourPlayer.blocks.add(waterTilemap.impassable)
+
     ourPlayer.blocks.add(lootChestTilemap.impassable)
-    ourPlayer.blocks.add(foregroundTilemap.impassable)
-    ourPlayer.blocks.add(smallFoliageTilemap.impassable)
-    ourPlayer.blocks.add(cliffsideTilemap.impassable)
-    ourPlayer.blocks.add(terrainTilemap.impassable)
+    ourPlayer.blocks.add(desertForeground.impassable)
+    ourPlayer.blocks.add(graveyardForeground.impassable)
+    ourPlayer.blocks.add(largeFoliageForeground.impassable)
+    ourPlayer.blocks.add(mediumFoliageForeground.impassable)
+    ourPlayer.blocks.add(objectsForeground.impassable)
+    ourPlayer.blocks.add(terrainForeground.impassable)
+
+    ourPlayer.blocks.add(desertBackground.impassable)
+    ourPlayer.blocks.add(graveyardBackground.impassable)
+    ourPlayer.blocks.add(largeFoliageBackground.impassable)
+    ourPlayer.blocks.add(mediumFoliageBackground.impassable)
+    ourPlayer.blocks.add(objectsBackground.impassable)
+    ourPlayer.blocks.add(smallFoliageBackground.impassable)
+    ourPlayer.blocks.add(terrainBackground.impassable)
+
     ourPlayer.world_size = worldSize
     ourPlayer.rect = ourPlayer.image.get_rect()
     engine.objects.append(ourPlayer)
@@ -196,11 +172,11 @@ def main():
 #                                                
 
     
-    ourEnemy = Player(10, 100, 100)
-    ourEnemy.image = ourPlayer.image
-    engine.objects.append(ourEnemy)
-    engine.drawables.add(ourEnemy)
-    engine.events[pygame.USEREVENT + 1] = ourEnemy.move_right
+    # ourEnemy = Player(10, 100, 100)
+    # ourEnemy.image = ourPlayer.image
+    # engine.objects.append(ourEnemy)
+    # engine.drawables.add(ourEnemy)
+    # engine.events[pygame.USEREVENT + 1] = ourEnemy.move_right
     
 
 #   ██████╗ █████╗ ███╗   ███╗███████╗██████╗  █████╗ 
@@ -226,8 +202,8 @@ def main():
 #                                                             
 
 
-    engine.drawables.add(ourOverlay)
-    engine.objects.append(ourOverlay)
+    # engine.drawables.add(ourOverlay)
+    # engine.objects.append(ourOverlay)
 
     
 #   ██████╗ ██████╗ ██╗     ██╗     ██╗███████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -239,7 +215,7 @@ def main():
 #                                                                            
 
 
-    engine.collisions[ourPlayer] = (ourEnemy, ourPlayer.ouch)
+    # engine.collisions[ourPlayer] = (ourEnemy, ourPlayer.ouch)
 
 
 

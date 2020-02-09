@@ -115,10 +115,15 @@ class Engine:
                 o.update(self.game_delta_time)
 
             # Generate outputs
-            # d.update()
             # self.drawables.update(self.game_delta_time)
+            for each in self.drawables:
+                if each not in self.objects:
+                    each.update(self.game_delta_time)
+
             rects = self.drawables.draw(self.screen)
             # print(rects)
+            # for each in self.drawables:
+            #     print(each.dirty)
             # print(self.drawables)
 
             # Show statistics?
