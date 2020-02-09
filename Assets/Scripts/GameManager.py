@@ -27,34 +27,198 @@ reusable).
 
 
 def main():
+    
     engine = LeagueEngine.Engine("Tercio", './Assets/Sprites/Branding/icon.png')
     engine.init_pygame()
 
-    sprites = LeagueEngine.Spritesheet("./ExampleGame/assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)
-    terrainFoliage = LeagueEngine.Tilemap("./ExampleGame/assets/world.lvl", sprites, layer=1)
-    terrainBackground = LeagueEngine.Tilemap("./ExampleGame/assets/background.lvl", sprites, layer=0)
-    worldSize = (terrainFoliage.wide * LeagueEngine.Settings.tile_size, terrainFoliage.high * LeagueEngine.Settings.tile_size,)
-    engine.drawables.add(terrainFoliage.passable.sprites())
+    world = "./Assets/World/Map1"
+    sprites = "./Assets/Sprites"
+    scripts = "./Assets/Scripts"
+
+
+
+
+#  ███████╗██████╗ ██████╗ ██╗████████╗███████╗███████╗██╗  ██╗███████╗███████╗████████╗
+#  ██╔════╝██╔══██╗██╔══██╗██║╚══██╔══╝██╔════╝██╔════╝██║  ██║██╔════╝██╔════╝╚══██╔══╝
+#  ███████╗██████╔╝██████╔╝██║   ██║   █████╗  ███████╗███████║█████╗  █████╗     ██║   
+#  ╚════██║██╔═══╝ ██╔══██╗██║   ██║   ██╔══╝  ╚════██║██╔══██║██╔══╝  ██╔══╝     ██║   
+#  ███████║██║     ██║  ██║██║   ██║   ███████╗███████║██║  ██║███████╗███████╗   ██║   
+#  ╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   
+#                                                                                       
+
+
+    # sprites = LeagueEngine.Spritesheet("./ExampleGame/assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)
+
+    sprites = LeagueEngine.Spritesheet((world + "/Spritesheet.png"), LeagueEngine.Settings.tile_size, 97)
+
+
+
+#  ████████╗██╗██╗     ███████╗███╗   ███╗ █████╗ ██████╗ 
+#  ╚══██╔══╝██║██║     ██╔════╝████╗ ████║██╔══██╗██╔══██╗
+#     ██║   ██║██║     █████╗  ██╔████╔██║███████║██████╔╝
+#     ██║   ██║██║     ██╔══╝  ██║╚██╔╝██║██╔══██║██╔═══╝ 
+#     ██║   ██║███████╗███████╗██║ ╚═╝ ██║██║  ██║██║     
+#     ╚═╝   ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝     
+#                                                         
+
+
+    # terrainFoliage = LeagueEngine.Tilemap("./ExampleGame/assets/world.lvl", sprites, layer=1)
+    # terrainBackground = LeagueEngine.Tilemap("./ExampleGame/assets/background.lvl", sprites, layer=0)
+
+    lootChestTilemap = LeagueEngine.Tilemap((world + "/CSV/Map1_Loot Chests.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 13)
+    objectsForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Objects_Objects Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 12)
+    desertForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Desert_Desert Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 11)
+    graveyardForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Graveyard_Graveyard Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 10)
+    largeFoliageForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Large Foliage Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 9)
+    mediumFoliageForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Medium Foliage Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 8)
+    
+    objectsBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Objects_Objects Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 7)
+    desertBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Desert_Desert Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 6)
+    graveyardBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Graveyard_Graveyard Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 5)
+    largeFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Large Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 4)
+    mediumFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Medium Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 3)
+    smallFoliageBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Foliage_Small Foliage Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 2)
+    terrainForeground = LeagueEngine.Tilemap((world + "/CSV/Map1_Terrain_Terrain Foreground.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 1)
+    terrainBackground = LeagueEngine.Tilemap((world + "/CSV/Map1_Terrain_Terrain Background.csv"), (world + "/CSV/Collidables.csv"), sprites, layer = 0)
+
+
+
+
+#  ██╗    ██╗ ██████╗ ██████╗ ██╗     ██████╗     ███████╗██╗███████╗███████╗
+#  ██║    ██║██╔═══██╗██╔══██╗██║     ██╔══██╗    ██╔════╝██║╚══███╔╝██╔════╝
+#  ██║ █╗ ██║██║   ██║██████╔╝██║     ██║  ██║    ███████╗██║  ███╔╝ █████╗  
+#  ██║███╗██║██║   ██║██╔══██╗██║     ██║  ██║    ╚════██║██║ ███╔╝  ██╔══╝  
+#  ╚███╔███╔╝╚██████╔╝██║  ██║███████╗██████╔╝    ███████║██║███████╗███████╗
+#   ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝     ╚══════╝╚═╝╚══════╝╚══════╝
+#                                                                            
+
+
+    # worldSize = (terrainFoliage.wide * LeagueEngine.Settings.tile_size, terrainFoliage.high * LeagueEngine.Settings.tile_size,)
+    
+    worldSize = (terrainBackground.wide * LeagueEngine.Settings.tile_size, terrainBackground.high * LeagueEngine.Settings.tile_size,)
+
+
+#  ██████╗ ██████╗  █████╗ ██╗    ██╗ █████╗ ██████╗ ██╗     ███████╗███████╗
+#  ██╔══██╗██╔══██╗██╔══██╗██║    ██║██╔══██╗██╔══██╗██║     ██╔════╝██╔════╝
+#  ██║  ██║██████╔╝███████║██║ █╗ ██║███████║██████╔╝██║     █████╗  ███████╗
+#  ██║  ██║██╔══██╗██╔══██║██║███╗██║██╔══██║██╔══██╗██║     ██╔══╝  ╚════██║
+#  ██████╔╝██║  ██║██║  ██║╚███╔███╔╝██║  ██║██████╔╝███████╗███████╗███████║
+#  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝
+#                                                                            
+
+
+    # engine.drawables.add(terrainFoliage.passable.sprites())
+    # engine.drawables.add(terrainBackground.passable.sprites())
+
+    engine.drawables.add(lootChestTilemap.passable.sprites())
+    engine.drawables.add(desertForeground.passable.sprites())
+    engine.drawables.add(graveyardForeground.passable.sprites())
+    engine.drawables.add(largeFoliageForeground.passable.sprites())
+    engine.drawables.add(mediumFoliageForeground.passable.sprites())
+    engine.drawables.add(objectsForeground.passable.sprites())
+    engine.drawables.add(terrainForeground.passable.sprites())
+
+    engine.drawables.add(desertBackground.passable.sprites())
+    engine.drawables.add(graveyardBackground.passable.sprites())
+    engine.drawables.add(largeFoliageBackground.passable.sprites())
+    engine.drawables.add(mediumFoliageBackground.passable.sprites())
+    engine.drawables.add(objectsBackground.passable.sprites())
+    engine.drawables.add(smallFoliageBackground.passable.sprites())
     engine.drawables.add(terrainBackground.passable.sprites())
-    ourPlayer = Player(2, 400, 300)
+
+
+
+#  ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗ 
+#  ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗
+#  ██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝
+#  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██╔══╝  ██╔══██╗
+#  ██║     ███████╗██║  ██║   ██║   ███████╗██║  ██║
+#  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+#                                                   
+
+
+    ourPlayer = Player(3, 1000, 1000)
     ourOverlay = Overlay(ourPlayer)
-    ourPlayer.blocks.add(terrainFoliage.impassable)
+
+    ourPlayer.blocks.add(lootChestTilemap.impassable)
+    ourPlayer.blocks.add(desertForeground.impassable)
+    ourPlayer.blocks.add(graveyardForeground.impassable)
+    ourPlayer.blocks.add(largeFoliageForeground.impassable)
+    ourPlayer.blocks.add(mediumFoliageForeground.impassable)
+    ourPlayer.blocks.add(objectsForeground.impassable)
+    ourPlayer.blocks.add(terrainForeground.impassable)
+
+    ourPlayer.blocks.add(desertBackground.impassable)
+    ourPlayer.blocks.add(graveyardBackground.impassable)
+    ourPlayer.blocks.add(largeFoliageBackground.impassable)
+    ourPlayer.blocks.add(mediumFoliageBackground.impassable)
+    ourPlayer.blocks.add(objectsBackground.impassable)
+    ourPlayer.blocks.add(smallFoliageBackground.impassable)
+    ourPlayer.blocks.add(terrainBackground.impassable)
+
     ourPlayer.world_size = worldSize
     ourPlayer.rect = ourPlayer.image.get_rect()
-    ourEnemy = Player(10, 100, 100)
-    ourEnemy.image = ourPlayer.image
     engine.objects.append(ourPlayer)
-    engine.objects.append(ourEnemy)
     engine.drawables.add(ourPlayer)
-    engine.drawables.add(ourEnemy)
-    engine.drawables.add(ourOverlay)
+    engine.player = ourPlayer
+
+
+#  ███████╗███╗   ██╗███████╗███╗   ███╗██╗   ██╗
+#  ██╔════╝████╗  ██║██╔════╝████╗ ████║╚██╗ ██╔╝
+#  █████╗  ██╔██╗ ██║█████╗  ██╔████╔██║ ╚████╔╝ 
+#  ██╔══╝  ██║╚██╗██║██╔══╝  ██║╚██╔╝██║  ╚██╔╝  
+#  ███████╗██║ ╚████║███████╗██║ ╚═╝ ██║   ██║   
+#  ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝     ╚═╝   ╚═╝   
+#                                                
+
+    
+    # ourEnemy = Player(10, 100, 100)
+    # ourEnemy.image = ourPlayer.image
+    # engine.objects.append(ourEnemy)
+    # engine.drawables.add(ourEnemy)
+    # engine.events[pygame.USEREVENT + 1] = ourEnemy.move_right
+    
+
+#   ██████╗ █████╗ ███╗   ███╗███████╗██████╗  █████╗ 
+#  ██╔════╝██╔══██╗████╗ ████║██╔════╝██╔══██╗██╔══██╗
+#  ██║     ███████║██╔████╔██║█████╗  ██████╔╝███████║
+#  ██║     ██╔══██║██║╚██╔╝██║██╔══╝  ██╔══██╗██╔══██║
+#  ╚██████╗██║  ██║██║ ╚═╝ ██║███████╗██║  ██║██║  ██║
+#   ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
+#                                                     
+
+
     mainCamera = LeagueEngine.LessDumbCamera(800, 600, ourPlayer, engine.drawables, worldSize)
     # c = LeagueEngine.DumbCamera(800, 600, p, e.drawables, world_size)
-
     engine.objects.append(mainCamera)
-    engine.objects.append(ourOverlay)
 
-    engine.collisions[ourPlayer] = (ourEnemy, ourPlayer.ouch)
+
+#   ██████╗ ██╗   ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
+#  ██╔═══██╗██║   ██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+#  ██║   ██║██║   ██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝ 
+#  ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗██║     ██╔══██║  ╚██╔╝  
+#  ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║███████╗██║  ██║   ██║   
+#   ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   
+#                                                             
+
+
+    # engine.drawables.add(ourOverlay)
+    # engine.objects.append(ourOverlay)
+
+    
+#   ██████╗ ██████╗ ██╗     ██╗     ██╗███████╗██╗ ██████╗ ███╗   ██╗███████╗
+#  ██╔════╝██╔═══██╗██║     ██║     ██║██╔════╝██║██╔═══██╗████╗  ██║██╔════╝
+#  ██║     ██║   ██║██║     ██║     ██║███████╗██║██║   ██║██╔██╗ ██║███████╗
+#  ██║     ██║   ██║██║     ██║     ██║╚════██║██║██║   ██║██║╚██╗██║╚════██║
+#  ╚██████╗╚██████╔╝███████╗███████╗██║███████║██║╚██████╔╝██║ ╚████║███████║
+#   ╚═════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+#                                                                            
+
+
+    # engine.collisions[ourPlayer] = (ourEnemy, ourPlayer.ouch)
+
+
+
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // LeagueEngine.Settings.gameTimeFactor)
 
     # engine.key_events[pygame.K_a] = ourPlayer.move_left
@@ -62,9 +226,6 @@ def main():
     # engine.key_events[pygame.K_w] = ourPlayer.move_up
     # engine.key_events[pygame.K_s] = ourPlayer.move_down
 
-    engine.player = ourPlayer
-
-    engine.events[pygame.USEREVENT + 1] = ourEnemy.move_right
     engine.events[pygame.QUIT] = engine.stop
     engine.run()
 

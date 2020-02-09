@@ -17,7 +17,7 @@ reusable).
 # Function to call when colliding with zombie
 
 def main():
-    engine = LeagueEngine.Engine("Tercio")
+    engine = LeagueEngine.Engine("Tercio", '../Assets/Sprites/Branding/icon.png')
     engine.init_pygame()
 
     sprites = LeagueEngine.Spritesheet("./assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)

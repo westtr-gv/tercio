@@ -34,6 +34,7 @@ class Engine:
         self.key_events[Settings.statistics_key] = self.toggle_statistics
         self.objects = []
         self.drawables = pygame.sprite.LayeredUpdates()
+        # self.drawables = pygame.sprite.LayeredDirty()
         self.screen = None
         self.real_delta_time = 0
         self.visible_statistics = False
@@ -48,7 +49,7 @@ class Engine:
     def init_pygame(self):
         """This function sets up the state of the pygame system,
         including passing any specific settings to it."""
-        
+
         # Startup the pygame system
         pygame.init()
         # Create our window
@@ -77,6 +78,14 @@ class Engine:
     def run(self):
         """The main game loop.  As close to our book code as possible."""
         self.running = True
+
+        background = pygame.Surface((Settings.width, Settings.height))
+        background.convert()
+        background.fill(Settings.fill_color)
+
+        self.drawables.clear(self.screen, background)
+        self.screen.fill(Settings.fill_color)
+
         while self.running:
             # The time since the last check
             now = pygame.time.get_ticks()
@@ -85,7 +94,8 @@ class Engine:
             self.game_delta_time = self.real_delta_time * (0.001 * Settings.gameTimeFactor)
 
             # Wipe screen
-            self.screen.fill(Settings.fill_color)
+            # self.screen.fill(Settings.fill_color)
+            self.drawables.clear(self.screen, background)
 
             # Process inputs
             self.handle_inputs()
@@ -113,8 +123,16 @@ class Engine:
                 o.update(self.game_delta_time)
 
             # Generate outputs
-            # d.update()
-            self.drawables.draw(self.screen)
+            # self.drawables.update(self.game_delta_time)
+            for each in self.drawables:
+                if each not in self.objects:
+                    each.update(self.game_delta_time)
+
+            rects = self.drawables.draw(self.screen)
+            # print(rects)
+            # for each in self.drawables:
+            #     print(each.dirty)
+            # print(self.drawables)
 
             # Show statistics?
             if self.visible_statistics:
@@ -125,7 +143,8 @@ class Engine:
                 self.show_overlay()
 
             # Could keep track of rectangles and update here, but eh.
-            pygame.display.flip()
+            # pygame.display.flip()
+            pygame.display.update(rects)
 
             # Frame limiting code
             self.clock.tick(Settings.fps)
@@ -138,7 +157,7 @@ class Engine:
     def add_group(self, group):
         self.drawables.add(group.sprites())
 
-    def toggle_statistics(self):
+    def toggle_statistics(self, deltaTime):
         self.visible_statistics = not self.visible_statistics
 
     def show_statistics(self):
