@@ -21,8 +21,8 @@ def main():
     engine.init_pygame()
 
     sprites = LeagueEngine.Spritesheet("./assets/base_chip_pipo.png", LeagueEngine.Settings.tile_size, 8)
-    terrainFoliage = LeagueEngine.Tilemap("./assets/world.lvl", sprites, layer=1)
-    terrainBackground = LeagueEngine.Tilemap("./assets/background.lvl", sprites, layer=0)
+    terrainFoliage = LeagueEngine.Tilemap("./assets/world.csv", "./assets/Collidables.csv", 30, 25, sprites, layer=1)
+    terrainBackground = LeagueEngine.Tilemap("./assets/background.csv", "./assets/Collidables.csv", 30, 25, sprites, layer=0)
     world_size = (terrainFoliage.wide * LeagueEngine.Settings.tile_size, terrainFoliage.high * LeagueEngine.Settings.tile_size,)
     engine.drawables.add(terrainFoliage.passable.sprites())
     engine.drawables.add(terrainBackground.passable.sprites())
