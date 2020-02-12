@@ -143,8 +143,9 @@ class Player(Character):
         # For performance reasons I created this sprite so we
         # don't have to create more memory each iteration of
         # collision detection.
-        self.collider = Drawable()
-        self.collider.image = pygame.Surface([Settings.tile_size // 8, Settings.tile_size // 8], pygame.SRCALPHA)
+        self.collider = Drawable(20)
+        self.collider.image = pygame.Surface([Settings.tile_size, Settings.tile_size], pygame.SRCALPHA)
+        self.collider.image.fill((127, 127, 127, 127))
         self.collider.rect = self.collider.image.get_rect()
         # Overlay
         self.font = pygame.font.Font('freesansbold.ttf', 32)
@@ -212,15 +213,21 @@ class Player(Character):
 
     def update(self, time):
         self.dirty = 1
-        self.collider.dirty = 1
         self.rect.x = self.x
         self.rect.y = self.y
         self.collisions = []
+        self.checkCollisions()
+
+    def checkCollisions(self):
         for sprite in self.blocks:
             self.collider.rect.x = sprite.x
             self.collider.rect.y = sprite.y
             if pygame.sprite.collide_rect(self, self.collider):
                 self.collisions.append(sprite)
+        # print("Collider Rect: (", self.collider.rect.x, ", ",self.collider.rect.y, ")")
+        # print(len(self.collisions))
+        # This is for debugging our collider
+        # self.image.blit(self.collider.image, (0,0), (0,0, Settings.tile_size * 2, Settings.tile_size * 2))
 
     def ouch(self):
         now = pygame.time.get_ticks()

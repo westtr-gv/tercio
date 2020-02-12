@@ -19,41 +19,90 @@ class Camera(UGameObject):
         self.y = self.center_on.y
         self.world_size = world_size
 
+        # self.topLeft_x = (self.center_on.x - (self.width // 2))         # topLeft_x is the top left corner of the rendered screen
+        # self.topLeft_y = (self.center_on.y - (self.height // 2))        # topLeft_y is the top left corner of the rendered screen
+        # self.bottomRight_x = (self.center_on.x + (self.width // 2))     # bottomRight_x is the bottom right corner of the rendered screen
+        # self.bottomRight_y = (self.center_on.y + (self.height // 2))    # bottomRight_y is the bottom right corner of the rendered screen
+
     def update(self, deltaTime):
         pass
 
 
 class DumbCamera(Camera):
     def update(self, time):
-        self.x = self.center_on.x
-        self.y = self.center_on.y
-        offset_x = - (self.x - (self.width // 2))
-        offset_y = - (self.y - (self.height // 2))
+        pass
+        # self.x = self.center_on.x
+        # self.y = self.center_on.y
+        # offset_x = - (self.x - (self.width // 2))
+        # offset_y = - (self.y - (self.height // 2))
 
-        for d in self.drawables:
-            d.rect.x = d.x + offset_x
-            d.rect.y = d.y + offset_y
-            d.dirty = 1
+        # for d in self.drawables:
+        #     d.rect.x = d.x + offset_x
+        #     d.rect.y = d.y + offset_y
+        #     d.dirty = 1
 
 
 class LessDumbCamera(Camera):
     def update(self, time):
-        self.dirty = 1
+        # self.dirty = 1
         if self.center_on.x - self.width // 2 > 0 and self.center_on.x + self.width // 2 < self.world_size[0] - Settings.tile_size:
             self.x = self.center_on.x
         if self.center_on.y - self.height // 2 > 0 and self.center_on.y + self.height // 2 < self.world_size[1] - Settings.tile_size:
             self.y = self.center_on.y
-        offset_x = - (self.x - (self.width // 2))
-        offset_y = - (self.y - (self.height // 2))
-        # print(str(offset_x) + ", " + str(offset_y))
+        self.offset_x = - (self.x - (self.width // 2))
+        self.offset_y = - (self.y - (self.height // 2))
+        self.topLeft_x = (self.x - (self.width // 2))      # topLeft_x is the top left corner of the rendered screen
+        self.topLeft_y = (self.y - (self.height // 2))     # topLeft_y is the top left corner of the rendered screen
+        self.bottomRight_x = (self.x + (self.width // 2))    # bottomRight_x is the bottom right corner of the rendered screen
+        self.bottomRight_y = (self.y + (self.height // 2))   # bottomRight_y is the bottom right corner of the rendered screen
+        # print("Top Left: (", topLeft_x, ", ", topLeft_y, ")")
+        # print("Bottom Right: (", bottomRight_x, ", ", bottomRight_y, ")")
 
+        # print(len(self.drawables))
+
+        self.LoopThroughDrawables()
+
+            # self.determineVisible(d)
+
+            # # Remove sprites that are no longer visible
+            # if (not d.isRendered and d in self.renderedDrawables):
+            #     self.renderedDrawables.remove(d)
+            # # Add sprites that are now visible
+            # if (d.isRendered and d not in self.renderedDrawables):
+            #     self.renderedDrawables.add(d)
+
+            # # Remove sprites that are no longer visible
+            # if (not d.isRendered):
+            #     self.renderedDrawables.remove(d)
+            # # Add sprites that are now visible
+            # if (d.isRendered):
+            #     self.renderedDrawables.add(d)
+
+        # print("Rendered Drawables On-screen: ", len(self.renderedDrawables))
+        # print("Drawables On-screen: ", len(self.drawables))
+        # print("Should be at minimum: ", (Settings.width // Settings.tile_size) * (Settings.height // Settings.tile_size))
+
+    def LoopThroughDrawables(self):
         for d in self.drawables:
-            if hasattr(d, 'static'):
-                continue
-            d.rect.x = d.x + offset_x
-            d.rect.y = d.y + offset_y
-            d.dirty = 1
+            if ((d.x >= self.topLeft_x - 64 and d.y >= self.topLeft_y - 64) and (d.x <= self.bottomRight_x + 64 and d.y <= self.bottomRight_y + 64)):
+                if(d.visible):
+                # if ((d.x >= self.topLeft_x - 64 and d.y >= self.topLeft_y - 64) and (d.x <= self.bottomRight_x + 64 and d.y <= self.bottomRight_y + 64)):
+                    if hasattr(d, 'static'):
+                        continue
 
+
+                    d.dirty = 1
+                    d.rect.x = d.x + self.offset_x
+                    d.rect.y = d.y + self.offset_y
+                    # print("This bitch visible: (", d.x, ", ", d.y, ")")
+
+    def determineVisible(self, drawable):
+        # Check if the drawable we are scanning is within the camera view
+        if ((drawable.x >= self.topLeft_x - 64 and drawable.y >= self.topLeft_y - 64) and (drawable.x <= self.bottomRight_x + 64 and drawable.y <= self.bottomRight_y + 64)):
+            drawable.visible = True
+        # If this drawable is not within view of our camera, flag it as not rendered
+        else:
+            drawable.visible = False
 
 class Tilemap:
     """An object that represents an MxN list of tiles.  Give x, y
@@ -84,9 +133,11 @@ class Tilemap:
     2, 2, 2, 2, 1, 2, 2
     """
 
-    def __init__(self, path, path2, spritesheet, tile_size=Settings.tile_size, layer=0):
+    def __init__(self, path, path2, width, height, spritesheet, tile_size=Settings.tile_size, layer=0):
         self.path = path
         self.path2 = path2
+        self.wide = width
+        self.high = height
         self.collidables = []
         self.spritesheet = spritesheet
         self.tile_size = tile_size
@@ -105,10 +156,8 @@ class Tilemap:
             contents = list(reader)
         # How many tiles wide is our world?
         # self.wide = int(contents[0][0])
-        self.wide = 128
         # And how tall?
         # self.high = int(contents[1][0])
-        self.high = 128
 
         # Record which objects are collidables
         with open(self.path2, 'r') as f2:
@@ -185,7 +234,16 @@ class Spritesheet:
         y = self.tile_size * (num // self.per_row)
         x = self.tile_size * (num % self.per_row)
         sprite = Drawable()
-        if((x, y) != (0, 0)):
-            sprite.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
-            sprite.image.blit(self.sheet, (0, 0), (x, y, x + self.tile_size, y + self.tile_size))
+        sprite.image = pygame.Surface((self.tile_size, self.tile_size), pygame.SRCALPHA).convert_alpha()
+        sprite.image.blit(self.sheet, (0, 0), (x, y, x + self.tile_size, y + self.tile_size))
         return sprite
+
+class CustomLayeredUpdates(pygame.sprite.LayeredUpdates):
+    def __init__(self):
+        super().__init__()
+    
+    def draw(self, surface):
+        for layer in self.layers():
+            for sprite in self.get_sprites_from_layer(layer):
+                if(sprite.visible and sprite.dirty > 0):
+                    sprite.draw(surface)
