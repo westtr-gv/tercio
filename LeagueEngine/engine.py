@@ -3,6 +3,7 @@ import os
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
+import LeagueEngine
 from .settings import *
 
 
@@ -35,6 +36,7 @@ class Engine:
         self.objects = []
         self.drawables = pygame.sprite.LayeredUpdates()
         # self.drawables = pygame.sprite.LayeredDirty()
+        # self.drawables = LeagueEngine.CustomLayeredUpdates()
         self.screen = None
         self.real_delta_time = 0
         self.visible_statistics = False
@@ -43,6 +45,7 @@ class Engine:
         self.overlay = None
         self.icon = icon
         self.player = {}
+        self.mainCamera = None
 
         self.iterations = 0
 
@@ -86,22 +89,40 @@ class Engine:
         self.drawables.clear(self.screen, background)
         self.screen.fill(Settings.fill_color)
 
-        while self.running:
+        counter = 0
+
+        while self.running and counter < 30:
+            counter = 0 # if you're debugging, set this to counter += 1 and configure your counter < value
+
             # The time since the last check
             now = pygame.time.get_ticks()
             self.real_delta_time = now - self.last_checked_time
             self.last_checked_time = now
             self.game_delta_time = self.real_delta_time * (0.001 * Settings.gameTimeFactor)
 
-            # Wipe screen
-            # self.screen.fill(Settings.fill_color)
-            self.drawables.clear(self.screen, background)
+
+            #  ██╗  ██╗ █████╗ ███╗   ██╗██████╗ ██╗     ███████╗    ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗
+            #  ██║  ██║██╔══██╗████╗  ██║██╔══██╗██║     ██╔════╝    ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝
+            #  ███████║███████║██╔██╗ ██║██║  ██║██║     █████╗      ██║██╔██╗ ██║██████╔╝██║   ██║   ██║
+            #  ██╔══██║██╔══██║██║╚██╗██║██║  ██║██║     ██╔══╝      ██║██║╚██╗██║██╔═══╝ ██║   ██║   ██║
+            #  ██║  ██║██║  ██║██║ ╚████║██████╔╝███████╗███████╗    ██║██║ ╚████║██║     ╚██████╔╝   ██║
+            #  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚══════╝    ╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝    ╚═╝
+            # region
 
             # Process inputs
             self.handle_inputs()
 
-            #change the player orientation
+            # change the player orientation
             self.mouse_move()
+            # endregion
+
+            #   █████╗ ███╗   ██╗██╗███╗   ███╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗███████╗
+            #  ██╔══██╗████╗  ██║██║████╗ ████║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+            #  ███████║██╔██╗ ██║██║██╔████╔██║███████║   ██║   ██║██║   ██║██╔██╗ ██║███████╗
+            #  ██╔══██║██║╚██╗██║██║██║╚██╔╝██║██╔══██║   ██║   ██║██║   ██║██║╚██╗██║╚════██║
+            #  ██║  ██║██║ ╚████║██║██║ ╚═╝ ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║███████║
+            #  ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+            # region
 
             # TODO : base only increment this if a certain amount of game time has elapsed
             self.iterations += 1
@@ -115,24 +136,44 @@ class Engine:
             # reset to avoid big maths
             if self.iterations == 8:
                 self.iterations == 0
+            # endregion
+
+            #  ██╗   ██╗██████╗ ██████╗  █████╗ ████████╗███████╗███████╗
+            #  ██║   ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝
+            #  ██║   ██║██████╔╝██║  ██║███████║   ██║   █████╗  ███████╗
+            #  ██║   ██║██╔═══╝ ██║  ██║██╔══██║   ██║   ██╔══╝  ╚════██║
+            #  ╚██████╔╝██║     ██████╔╝██║  ██║   ██║   ███████╗███████║
+            #   ╚═════╝ ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝╚══════╝
+            # region
 
             # Update game world
             # Each object must have an update(time) method
-            self.check_collisions()
+            # self.check_collisions()
             for o in self.objects:
                 o.update(self.game_delta_time)
 
             # Generate outputs
             # self.drawables.update(self.game_delta_time)
             for each in self.drawables:
-                if each not in self.objects:
+                if not isinstance(each, LeagueEngine.GameObject):
                     each.update(self.game_delta_time)
 
+            self.mainCamera.update(self.game_delta_time)
+            # endregion
+
+            #  ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ ██╗███╗   ██╗ ██████╗
+            #  ██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗██║████╗  ██║██╔════╝
+            #  ██████╔╝█████╗  ██╔██╗ ██║██║  ██║█████╗  ██████╔╝██║██╔██╗ ██║██║  ███╗
+            #  ██╔══██╗██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗██║██║╚██╗██║██║   ██║
+            #  ██║  ██║███████╗██║ ╚████║██████╔╝███████╗██║  ██║██║██║ ╚████║╚██████╔╝
+            #  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+            # region
+
+            # Wipe screen
+            # self.screen.fill(Settings.fill_color)
+            self.drawables.clear(self.screen, background)
+
             rects = self.drawables.draw(self.screen)
-            # print(rects)
-            # for each in self.drawables:
-            #     print(each.dirty)
-            # print(self.drawables)
 
             # Show statistics?
             if self.visible_statistics:
@@ -145,17 +186,27 @@ class Engine:
             # Could keep track of rectangles and update here, but eh.
             # pygame.display.flip()
             pygame.display.update(rects)
+            # endregion
 
+            #   ██████╗██╗      ██████╗  ██████╗██╗  ██╗
+            #  ██╔════╝██║     ██╔═══██╗██╔════╝██║ ██╔╝
+            #  ██║     ██║     ██║   ██║██║     █████╔╝
+            #  ██║     ██║     ██║   ██║██║     ██╔═██╗
+            #  ╚██████╗███████╗╚██████╔╝╚██████╗██║  ██╗
+            #   ╚═════╝╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝
+            # region
             # Frame limiting code
             self.clock.tick(Settings.fps)
+            # endregion
 
     def check_collisions(self):
+        # print("Collisions: ", len(self.collisions))
         for i in self.collisions.keys():
             if pygame.sprite.collide_rect(i, self.collisions[i][0]):
                 self.collisions[i][1]()
 
-    def add_group(self, group):
-        self.drawables.add(group.sprites())
+    # def add_group(self, group):
+    #     self.drawables.add(group.sprites())
 
     def toggle_statistics(self, deltaTime):
         self.visible_statistics = not self.visible_statistics
@@ -207,7 +258,7 @@ class Engine:
         elif keys[pygame.K_s]:
             self.player.move_down(self.game_delta_time)
             pressed = True
-        
+
         return pressed
 
     '''

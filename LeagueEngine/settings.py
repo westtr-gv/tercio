@@ -19,8 +19,10 @@ class Settings:
     version = 0.9
     fps = 144
     key_repeat = 50
-    width = 1920
-    height = 1080
+    width = 1440
+    height = 810
+    # width = 600
+    # height = 600
     tile_size = 32
     gameTimeFactor = 1
     fill_color = (46, 88, 100)
