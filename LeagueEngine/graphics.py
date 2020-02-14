@@ -55,8 +55,8 @@ class LessDumbCamera(Camera):
         self.topLeft_y = (self.y - (self.height // 2))     # topLeft_y is the top left corner of the rendered screen
         self.bottomRight_x = (self.x + (self.width // 2))    # bottomRight_x is the bottom right corner of the rendered screen
         self.bottomRight_y = (self.y + (self.height // 2))   # bottomRight_y is the bottom right corner of the rendered screen
-        # print("Top Left: (", topLeft_x, ", ", topLeft_y, ")")
-        # print("Bottom Right: (", bottomRight_x, ", ", bottomRight_y, ")")
+        # print("Top Left: (", self.topLeft_x, ", ", self.topLeft_y, ")")
+        # print("Bottom Right: (", self.bottomRight_x, ", ", self.bottomRight_y, ")")
 
         # print(len(self.drawables))
 
@@ -89,7 +89,6 @@ class LessDumbCamera(Camera):
                 # if ((d.x >= self.topLeft_x - 64 and d.y >= self.topLeft_y - 64) and (d.x <= self.bottomRight_x + 64 and d.y <= self.bottomRight_y + 64)):
                     if hasattr(d, 'static'):
                         continue
-
 
                     d.dirty = 1
                     d.rect.x = d.x + self.offset_x

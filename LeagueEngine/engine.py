@@ -37,7 +37,8 @@ class Engine:
         self.drawables = pygame.sprite.LayeredUpdates()
         # self.drawables = pygame.sprite.LayeredDirty()
         # self.drawables = LeagueEngine.CustomLayeredUpdates()
-        self.screen = None
+        self.bufferScreen = None
+        self.displayScreen = None
         self.real_delta_time = 0
         self.visible_statistics = False
         self.statistics_font = None
@@ -46,6 +47,8 @@ class Engine:
         self.icon = icon
         self.player = {}
         self.mainCamera = None
+        self.viewportWidth = 1280
+        self.viewportHeight = 720
 
         self.iterations = 0
 
@@ -56,7 +59,8 @@ class Engine:
         # Startup the pygame system
         pygame.init()
         # Create our window
-        self.screen = pygame.display.set_mode((Settings.width, Settings.height))
+        self.bufferScreen = pygame.Surface((self.viewportWidth, self.viewportHeight))
+        self.displayScreen = pygame.display.set_mode((Settings.width, Settings.height))
         # Set the title that will display at the top of the window.
         pygame.display.set_caption(self.title)
 
@@ -86,8 +90,8 @@ class Engine:
         background.convert()
         background.fill(Settings.fill_color)
 
-        self.drawables.clear(self.screen, background)
-        self.screen.fill(Settings.fill_color)
+        self.drawables.clear(self.bufferScreen, background)
+        self.bufferScreen.fill(Settings.fill_color)
 
         counter = 0
 
@@ -169,10 +173,12 @@ class Engine:
             # region
 
             # Wipe screen
-            # self.screen.fill(Settings.fill_color)
-            self.drawables.clear(self.screen, background)
+            # self.bufferScreen.fill(Settings.fill_color)
+            self.drawables.clear(self.bufferScreen, background)
 
-            rects = self.drawables.draw(self.screen)
+            rects = self.drawables.draw(self.bufferScreen)
+
+            pygame.transform.scale(self.bufferScreen, (Settings.width, Settings.height), self.displayScreen)
 
             # Show statistics?
             if self.visible_statistics:
@@ -183,8 +189,8 @@ class Engine:
                 self.show_overlay()
 
             # Could keep track of rectangles and update here, but eh.
-            # pygame.display.flip()
-            pygame.display.update(rects)
+            pygame.display.flip()
+            # pygame.display.update(rects)
             # endregion
 
             #   ██████╗██╗      ██████╗  ██████╗██╗  ██╗
@@ -214,10 +220,10 @@ class Engine:
         statistics_string = "Version: " + str(Settings.version)
         statistics_string = statistics_string + " FPS: " + str(int(self.clock.get_fps()))
         fps = self.statistics_font.render(statistics_string, True, Settings.statistics_color)
-        self.screen.blit(fps, (10, 10))
+        self.bufferScreen.blit(fps, (10, 10))
 
     def show_overlay(self):
-        self.screen.blit(self.overlay, Settings.overlay_location)
+        self.bufferScreen.blit(self.overlay, Settings.overlay_location)
 
     def stop(self, time):
         self.running = False
@@ -268,8 +274,13 @@ class Engine:
     def mouse_move(self):
         mouseScreenPos = pygame.mouse.get_pos()
 
-        # Getting the center of our player in screen space, 
-        # rather than the top left of his sprite, nor his 
+        # Got this line to help with mouse position and scaled screens
+        scaledMouseScreenPos = (mouseScreenPos[0] * (float(self.viewportWidth) / float(Settings.width)), mouseScreenPos[1] * (float(self.viewportHeight) / float(Settings.height)))
+
+        # print("(", scaledMouseScreenPos[0], ", ", scaledMouseScreenPos[1], ")")
+
+        # Getting the center of our player in screen space,
+        # rather than the top left of his sprite, nor his
         # position in world space
         playerCenterX = self.player.rect.x + 32
         playerCenterY = self.player.rect.y + 32
@@ -277,6 +288,7 @@ class Engine:
         # Mouse positions relative to where our player is
         mouseRelativeX = mouseScreenPos[0] - playerCenterX
         mouseRelativeY = -1 * (mouseScreenPos[1] - playerCenterY)
+        # print("(", mouseRelativeX, ", ", mouseRelativeY, ")")
 
         absMouseRelativeX = abs(mouseRelativeX)
         absMouseRelativeY = abs(mouseRelativeY)
@@ -286,7 +298,7 @@ class Engine:
         if(debugMode):
             temp = ""
 
-        #region Cardinal-Quadrants
+        # region Cardinal-Quadrants
         # Checking which cardinal-quadrant we're facing
         if(absMouseRelativeX > absMouseRelativeY):
             # This means the mouse is either East or West of the player
@@ -308,9 +320,9 @@ class Engine:
                 self.player.orient = "S"
                 if(debugMode):
                     temp += "South"
-        #endregion
+        # endregion
 
-        #region Corner-Quadrants
+        # region Corner-Quadrants
         # # Checking which corner-quadrant our mouse is in
         # if(mouseRelativeY > 0):
         #     temp += "Top "
@@ -321,12 +333,12 @@ class Engine:
         #     temp += "Right"
         # else:
         #     temp += "Left"
-        #endregion
+        # endregion
 
         if(debugMode):
             print(temp)
 
-        #region Old Code
+        # region Old Code
         # # Mouse is at or above the player
         # if mouseRelativeY <= self.player.y:
         #     # Orient top
@@ -373,4 +385,4 @@ class Engine:
         #         else:
         #             # Orient top-right
         #             self.player.orient = "SE"
-        #endregion
+        # endregion

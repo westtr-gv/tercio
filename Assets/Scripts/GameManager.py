@@ -126,7 +126,7 @@ def main():
 #  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
 #
 
-    ourPlayer = Player(8, 720, 405)
+    ourPlayer = Player(8, engine.viewportWidth // 2, engine.viewportHeight // 2)
     # ourPlayer = Player(8, 1000, 1000)
     # engine.drawables.add(ourPlayer.collider)
 
@@ -177,7 +177,7 @@ def main():
 #   ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 #
 
-    mainCamera = LeagueEngine.LessDumbCamera(Settings.width, Settings.height, ourPlayer, engine.drawables, worldSize)
+    mainCamera = LeagueEngine.LessDumbCamera(engine.viewportWidth, engine.viewportHeight, ourPlayer, engine.drawables, worldSize)
     # c = LeagueEngine.DumbCamera(800, 600, p, e.drawables, world_size)
     engine.mainCamera = mainCamera
 
