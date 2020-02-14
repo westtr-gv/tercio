@@ -92,14 +92,13 @@ class Engine:
         counter = 0
 
         while self.running and counter < 30:
-            counter = 0 # if you're debugging, set this to counter += 1 and configure your counter < value
+            counter = 0  # if you're debugging, set this to counter += 1 and configure your counter < value
 
             # The time since the last check
             now = pygame.time.get_ticks()
             self.real_delta_time = now - self.last_checked_time
             self.last_checked_time = now
             self.game_delta_time = self.real_delta_time * (0.001 * Settings.gameTimeFactor)
-
 
             #  ██╗  ██╗ █████╗ ███╗   ██╗██████╗ ██╗     ███████╗    ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗
             #  ██║  ██║██╔══██╗████╗  ██║██╔══██╗██║     ██╔════╝    ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝
@@ -267,51 +266,111 @@ class Engine:
     '''
 
     def mouse_move(self):
-        mouseCords = pygame.mouse.get_pos()
+        mouseScreenPos = pygame.mouse.get_pos()
 
-        # Mouse is at or above the player
-        if mouseCords[1] <= self.player.y:
-            # Orient top
-            if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
+        # Getting the center of our player in screen space, 
+        # rather than the top left of his sprite, nor his 
+        # position in world space
+        playerCenterX = self.player.rect.x + 32
+        playerCenterY = self.player.rect.y + 32
+
+        # Mouse positions relative to where our player is
+        mouseRelativeX = mouseScreenPos[0] - playerCenterX
+        mouseRelativeY = -1 * (mouseScreenPos[1] - playerCenterY)
+
+        absMouseRelativeX = abs(mouseRelativeX)
+        absMouseRelativeY = abs(mouseRelativeY)
+
+        # Just a simple string variable that makes it easier to print out debug logs
+        debugMode = False
+        if(debugMode):
+            temp = ""
+
+        #region Cardinal-Quadrants
+        # Checking which cardinal-quadrant we're facing
+        if(absMouseRelativeX > absMouseRelativeY):
+            # This means the mouse is either East or West of the player
+            if(mouseRelativeX > 0):
+                self.player.orient = "E"
+                if(debugMode):
+                    temp += "East"
+            else:
+                self.player.orient = "W"
+                if(debugMode):
+                    temp += "West"
+        else:
+            # This means the mouse is either North or South of the player
+            if(mouseRelativeY > 0):
                 self.player.orient = "N"
-
-            # Mouse is left of the player
-            elif mouseCords[0] < self.player.x:
-                # Orient left
-                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    self.player.orient = "W"
-                else:
-                    # Orient top-left
-                    self.player.orient = "NW"
-
-            # Mouse is right of the player
-            elif mouseCords[0] > self.player.x:
-                # Orient right
-                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    self.player.orient = "E"
-                else:
-                    # Orient top-right
-                    self.player.orient = "NE"
-
-        # Mouse is below the player
-        elif mouseCords[1] > self.player.y:
-            # Orient bottow
-            if mouseCords[0] > Settings.width / 3 and mouseCords[0] < Settings.width - (Settings.width / 3):
+                if(debugMode):
+                    temp += "North"
+            else:
                 self.player.orient = "S"
+                if(debugMode):
+                    temp += "South"
+        #endregion
 
-            # Mouse is left of the player
-            elif mouseCords[0] < self.player.x:
-                # Orient left
-                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    self.player.orient = "W"
-                else:
-                    # Orient top-left
-                    self.player.orient = "SW"
-            # Mouse is right of the player
-            elif mouseCords[0] > self.player.x:
-                # Orient right
-                if mouseCords[1] > Settings.height / 3 and mouseCords[1] < Settings.height - (Settings.height / 3):
-                    self.player.orient = "E"
-                else:
-                    # Orient top-right
-                    self.player.orient = "SE"
+        #region Corner-Quadrants
+        # # Checking which corner-quadrant our mouse is in
+        # if(mouseRelativeY > 0):
+        #     temp += "Top "
+        # else:
+        #     temp += "Bottom "
+
+        # if(mouseRelativeX > 0):
+        #     temp += "Right"
+        # else:
+        #     temp += "Left"
+        #endregion
+
+        if(debugMode):
+            print(temp)
+
+        #region Old Code
+        # # Mouse is at or above the player
+        # if mouseRelativeY <= self.player.y:
+        #     # Orient top
+        #     if mouseRelativeX > Settings.width / 3 and mouseRelativeX < Settings.width - (Settings.width / 3):
+        #         self.player.orient = "N"
+
+        #     # Mouse is left of the player
+        #     elif mouseRelativeX < self.player.x:
+        #         # Orient left
+        #         if mouseRelativeY > Settings.height / 3 and mouseRelativeY < Settings.height - (Settings.height / 3):
+        #             self.player.orient = "W"
+        #         else:
+        #             # Orient top-left
+        #             self.player.orient = "NW"
+
+        #     # Mouse is right of the player
+        #     elif mouseRelativeX > self.player.x:
+        #         # Orient right
+        #         if mouseRelativeY > Settings.height / 3 and mouseRelativeY < Settings.height - (Settings.height / 3):
+        #             self.player.orient = "E"
+        #         else:
+        #             # Orient top-right
+        #             self.player.orient = "NE"
+
+        # # Mouse is below the player
+        # elif mouseRelativeY > self.player.y:
+        #     # Orient bottow
+        #     if mouseRelativeX > Settings.width / 3 and mouseRelativeX < Settings.width - (Settings.width / 3):
+        #         self.player.orient = "S"
+
+        #     # Mouse is left of the player
+        #     elif mouseRelativeX < self.player.x:
+        #         # Orient left
+        #         if mouseRelativeY > Settings.height / 3 and mouseRelativeY < Settings.height - (Settings.height / 3):
+        #             self.player.orient = "W"
+        #         else:
+        #             # Orient top-left
+        #             self.player.orient = "SW"
+        #     # Mouse is right of the player
+        #     elif mouseRelativeX > self.player.x:
+        #         # Orient right
+        #         if mouseRelativeY > Settings.height / 3 and mouseRelativeY < Settings.height - (Settings.height / 3):
+        #             self.player.orient = "E"
+        #         else:
+        #             # Orient top-right
+        #             self.player.orient = "SE"
+        #endregion
