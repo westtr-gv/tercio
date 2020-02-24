@@ -126,7 +126,7 @@ def main():
 #  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
 #
 
-    ourPlayer = Player(8, engine.viewportWidth // 2, engine.viewportHeight // 2)
+    ourPlayer = Player(8, engine.viewportWidth // 2-50, engine.viewportHeight // 2-50)
     # ourPlayer = Player(8, 1000, 1000)
     # engine.drawables.add(ourPlayer.collider)
 
