@@ -130,12 +130,14 @@ class Player(Character):
 
         self.image = pygame.transform.scale(self.image, (64, 64))
         self.rect = self.image.get_rect()
+        # self.rect = self.rect.inflate(-32, 0)
+        # print("Left: ", self.rect.left, "\nRight: ", self.rect.right, "\nTop: ", self.rect.top, "\nBottom: ", self.rect.bottom)
         # How big the world is, so we can check for boundries
         self.world_size = world_size
         # What sprites am I not allowd to cross?
         self.blocks = pygame.sprite.Group()
         # Which collision detection function?
-        self.collide_function = pygame.sprite.collide_circle
+        self.collide_function = pygame.sprite.collide_rect
         self.collisions = []
         # For collision detection, we need to compare our sprite
         # with collideable sprites.  However, we have to remap
@@ -145,8 +147,9 @@ class Player(Character):
         # collision detection.
         self.collider = Drawable(20)
         self.collider.image = pygame.Surface([Settings.tile_size, Settings.tile_size], pygame.SRCALPHA)
-        self.collider.image.fill((127, 127, 127, 127))
+        # self.collider.image.fill((127, 127, 127, 127))
         self.collider.rect = self.collider.image.get_rect()
+        # print("Left: ", self.collider.rect.left, "\nRight: ", self.collider.rect.right, "\nTop: ", self.collider.rect.top, "\nBottom: ", self.collider.rect.bottom)
         # Overlay
         self.font = pygame.font.Font('freesansbold.ttf', 32)
         self.overlay = self.font.render(str(self.health) + "        4 lives", True, (0, 0, 0))
@@ -155,68 +158,86 @@ class Player(Character):
         amount = self.delta * time
         try:
             if self.x - amount < 0:
-                raise OffScreenLeftException
+                self.x = - 16
+                # raise OffScreenLeftException
             else:
                 self.x = self.x - amount
+
+            for sprite in self.blocks:
+                self.collider.rect.x = sprite.x
+                self.collider.rect.y = sprite.y
+                # if pygame.sprite.collide_rect(self, self.collider):
+                if self.rect.colliderect(self.collider.rect):
+                    self.x = self.collider.rect.right - 16
+
                 self.update(0)
-                while(len(self.collisions) != 0):
-                    self.x = self.x + amount
-                    self.update(0)
         except:
             pass
 
     def move_right(self, time):
-        self.collisions = []
         amount = self.delta * time
         try:
-            if self.x + amount > self.world_size[0] - Settings.tile_size:
-                raise OffScreenRightException
+            if self.x + amount > self.world_size[0] - Settings.tile_size - 64:
+                self.x = self.world_size[0] - Settings.tile_size - 64
+                # raise OffScreenRightException
             else:
                 self.x = self.x + amount
+
+            for sprite in self.blocks:
+                self.collider.rect.x = sprite.x
+                self.collider.rect.y = sprite.y
+                if self.rect.colliderect(self.collider.rect):
+                    self.x = self.collider.rect.left - 48
+
                 self.update(0)
-                while(len(self.collisions) != 0):
-                    self.x = self.x - amount
-                    self.update(0)
         except:
             pass
 
     def move_up(self, time):
-        self.collisions = []
         amount = self.delta * time
         try:
             if self.y - amount < 0:
-                raise OffScreenTopException
+                self.y = -10
+                # raise OffScreenTopException
             else:
                 self.y = self.y - amount
+
+            for sprite in self.blocks:
+                self.collider.rect.x = sprite.x
+                self.collider.rect.y = sprite.y
+                if self.rect.colliderect(self.collider.rect):
+                    self.y = self.collider.rect.bottom - 32
+
                 self.update(0)
-                if len(self.collisions) != 0:
-                    self.y = self.y + amount
-                    self.update(0)
-                    self.collisions = []
+
         except:
             pass
 
     def move_down(self, time):
         amount = self.delta * time
         try:
-            if self.y + amount > self.world_size[1] - Settings.tile_size:
-                raise OffScreenBottomException
+            if self.y + amount > self.world_size[1] - Settings.tile_size - 64:
+                self.y = self.world_size[1] - Settings.tile_size - 64
+                # raise OffScreenBottomException
             else:
                 self.y = self.y + amount
+
+            for sprite in self.blocks:
+                self.collider.rect.x = sprite.x
+                self.collider.rect.y = sprite.y
+                if self.rect.colliderect(self.collider.rect):
+                    self.y = self.collider.rect.top - 64
+
                 self.update(0)
-                if len(self.collisions) != 0:
-                    self.y = self.y - amount
-                    self.update(0)
-                    self.collisions = []
         except:
             pass
 
     def update(self, time):
         self.dirty = 1
-        self.rect.x = self.x
-        self.rect.y = self.y
-        self.collisions = []
-        self.checkCollisions()
+        self.rect.x = self.x + 16
+        self.rect.y = self.y + 32
+        # self.collisions = []
+        # self.checkCollisions()
 
     def checkCollisions(self):
         for sprite in self.blocks:

@@ -148,6 +148,8 @@ def main():
 
     ourPlayer.world_size = worldSize
     ourPlayer.rect = ourPlayer.image.get_rect()
+    ourPlayer.rect = ourPlayer.rect.inflate(-32, 0)
+    ourPlayer.rect.inflate_ip(0, -32)
     engine.objects.append(ourPlayer)
     engine.drawables.add(ourPlayer)
     ourOverlay = Overlay(ourPlayer)
